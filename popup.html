@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <script src="utils/crypto-js.min.js"></script>
+  <script type="module" src="utils/popup.js"></script>
+  <script src="utils/jquery-3.6.0.min.js"></script>
+  <script src="viewJson/jquery.json-viewer.js"></script>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="viewJson/jquery.json-viewer.css">
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  #app {
+    width: 800px;
+    height: 500px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+</style>
+
+<body>
+  <div id="app">
+    <div class="header">
+      <select name="" class="url-select"></select>
+      <button class="clear-all">清除所有</button>
+    </div>
+    <div class="main">
+      <div class="left">
+        <div class="thead">
+          <div class="th">#</div>
+          <div class="th">Method</div>
+          <div class="th">Url</div>
+        </div>
+        <div class="list"></div>
+      </div>
+      <div class="right">
+        <pre id="json-renderer"></pre>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
