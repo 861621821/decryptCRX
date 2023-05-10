@@ -68,6 +68,10 @@ select {
   flex: 1;
 }
 
+.cache-length {
+  margin-right: 10px;
+}
+
 .clear-all {
   color: #f56c6c;
   background: #fef0f0;
@@ -88,8 +92,8 @@ select {
   flex-direction: column;
 }
 .main .left .thead {
-  background: #f2f2f2;
   padding: 5px 0;
+  background: #f2f2f2;
 }
 .main .left .list {
   flex: 1;
@@ -137,6 +141,9 @@ select {
   flex: 1;
   padding: 5px 5px 5px 20px;
   overflow: auto;
+}
+.main .right pre {
+  font-family: system-ui, "PingFang SC", STHeiti, sans-serif !important;
 }
 
 /*# sourceMappingURL=popup.css.map */

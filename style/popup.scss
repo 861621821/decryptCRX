@@ -68,6 +68,10 @@ select {
   }
 }
 
+.cache-length {
+  margin-right: 10px;
+}
+
 .clear-all {
   color: #f56c6c;
   background: #fef0f0;
@@ -86,8 +90,8 @@ select {
     display: flex;
     flex-direction: column;
     .thead {
-      background: #f2f2f2;
       padding: 5px 0;
+      background: #f2f2f2;
     }
     .list {
       flex: 1;
@@ -121,7 +125,7 @@ select {
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
-          //   min-width: 345px;
+          // min-width: 345px;
         }
       }
     }
@@ -130,5 +134,8 @@ select {
     flex: 1;
     padding: 5px 5px 5px 20px;
     overflow: auto;
+    pre {
+      font-family: system-ui, 'PingFang SC', STHeiti, sans-serif !important;
+    }
   }
 }

@@ -1,0 +1,100 @@
+.xl-jira {
+  position: fixed;
+  right: -400px;
+  bottom: 10px;
+  height: 150px;
+  width: 350px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0px 0px 5px #d9d9d9;
+  z-index: 999999999;
+  transition: all 0.2s;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.xl-jira:hover .close {
+  display: block;
+}
+.xl-jira.active {
+  right: 10px;
+}
+.xl-jira .close {
+  display: none;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0px 0px 5px #ddd;
+  cursor: pointer;
+}
+.xl-jira .close::before, .xl-jira .close::after {
+  content: "";
+  display: inline-block;
+  height: 2px;
+  width: 12px;
+  position: absolute;
+  top: 8.5px;
+  left: 4px;
+  background: #9e9d9d;
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+.xl-jira .close::after {
+  transform: rotate(-45deg);
+}
+.xl-jira .xl-msg {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.xl-jira .msg-title {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+}
+.xl-jira .msg-title img {
+  width: 40px;
+  margin-right: 5px;
+}
+.xl-jira .msg-content {
+  flex: 1;
+  margin: 5px 0;
+  overflow-y: auto;
+}
+.xl-jira .msg-content a {
+  font-size: 14px !important;
+  color: #1eafb4;
+  width: 310px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.xl-jira ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.xl-jira ::-webkit-scrollbar-track {
+  width: 6px;
+  background: rgba(16, 31, 28, 0.08);
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+}
+.xl-jira ::-webkit-scrollbar-thumb {
+  background-color: rgba(16, 31, 28, 0.2);
+  background-clip: padding-box;
+  min-height: 28px;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+}
+.xl-jira ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(16, 31, 28, 0.5);
+}
+
+/*# sourceMappingURL=content.css.map */

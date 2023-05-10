@@ -1,10 +1,10 @@
 let listMap = [];
-let urlsMap = [];
+let urlMap = [];
 // 获取cookie
 let cookie = '';
 chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-  chrome.cookies.getAll({url: tabs[0].url}, (cookies)=> {
-    const authorization = cookies.find(e => e.name === '_authorization');
+  chrome.cookies.getAll({ url: tabs[0].url }, (cookies) => {
+    const authorization = cookies.find((e) => e.name === '_authorization');
     if (authorization && authorization.value) {
       cookie = authorization.value;
     }
@@ -12,21 +12,17 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 });
 // 建立与 background.js 的通信连接
 const port = chrome.runtime.connect({
-  name: 'popup'
+  name: 'popup',
 });
 
 // 加密
 const encryptParams = (params) => {
   const data = CryptoJS.enc.Utf8.parse(params);
   const key = CryptoJS.enc.Utf8.parse(cookie.slice(cookie.length - 16));
-  const encrypted = CryptoJS.AES.encrypt(
-    data,
-    key,
-    {
-      mode: CryptoJS.mode.ECB,
-      padding: CryptoJS.pad.Pkcs7
-    }
-  );
+  const encrypted = CryptoJS.AES.encrypt(data, key, {
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7,
+  });
   return encrypted.toString();
 };
 
@@ -34,14 +30,10 @@ const encryptParams = (params) => {
 const decryptParams = (encryptedParams) => {
   try {
     const key = CryptoJS.enc.Utf8.parse(cookie.slice(cookie.length - 16));
-    const decipher = CryptoJS.AES.decrypt(
-      encryptedParams,
-      key,
-      {
-        mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7
-      }
-    );
+    const decipher = CryptoJS.AES.decrypt(encryptedParams, key, {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7,
+    });
     const plaintext = decipher.toString(CryptoJS.enc.Utf8);
     return JSON.parse(plaintext);
   } catch (error) {
@@ -52,8 +44,8 @@ const decryptParams = (encryptedParams) => {
 
 // 创建dom
 const createListDom = (list) => {
-  const temp = list.map(e => {
-    return `<div class="row" data-index="${e.i}"><div class="td">${e.i+1}</div><div class="td">${e.method}</div><div class="td" title="${e.url}">${e.url}</div></div>`;
+  const temp = list.map((e) => {
+    return `<div class="row" data-index="${e.i}"><div class="td">${e.i + 1}</div><div class="td">${e.method}</div><div class="td" title="${e.url}">${e.url}</div></div>`;
   });
   $('.list').html(temp.join(''));
 };
@@ -67,44 +59,49 @@ const createOpsDom = (list) => {
 
 const initRecords = (records) => {
   const list = records.map((e, i) => {
-    !urlsMap.includes(e.url) && urlsMap.push(e.url);
+    !urlMap.includes(e.url) && urlMap.push(e.url);
     return {
       ...e,
       i,
-      data: e.data.enc_data ? decryptParams(e.data.enc_data) : e.data
+      data: e.data.enc_data ? decryptParams(e.data.enc_data) : e.data,
     };
   });
   listMap = list;
   createListDom(listMap);
-  createOpsDom(urlsMap);
+  createOpsDom(urlMap);
 };
 
-chrome.runtime.onMessage.addListener(({ type, records }, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(({ type, data }, sender, sendResponse) => {
+  console.log('type', type);
   switch (type) {
-  case 1:
-    initRecords(records);
-    break;
-  
-  default:
-    break;
+    case 1:
+      console.log(data);
+      $('.cache-length').val(data.length || 20);
+      initRecords(data.records);
+      break;
+
+    default:
+      break;
   }
-  sendResponse({status: 2});
 });
-  
+
 $('.list').on('click', '.row', function () {
-  Array.from($('.row')).map(e => {
+  Array.from($('.row')).map((e) => {
     $(e).removeClass('selected');
   });
   $(this).addClass('selected');
-  $('#json-renderer').jsonViewer({}, {
-    collapsed: $('#collapsed').is(':checked'),
-    withQuotes: $('#with-quotes').is(':checked')
-  });
+  $('#json-renderer').jsonViewer(
+    {},
+    {
+      collapsed: $('#collapsed').is(':checked'),
+      withQuotes: $('#with-quotes').is(':checked'),
+    }
+  );
   setTimeout(() => {
     const i = $(this).data('index');
     $('#json-renderer').jsonViewer(listMap[i].data, {
       collapsed: $('#collapsed').is(':checked'),
-      withQuotes: $('#with-quotes').is(':checked')
+      withQuotes: $('#with-quotes').is(':checked'),
     });
   }, 50);
 });
@@ -114,19 +111,23 @@ $('.url-select').on('change', (e) => {
   if (e.target.value === '') {
     temp = listMap;
   } else {
-    temp = listMap.filter(({url}) => url === e.target.value);
+    temp = listMap.filter(({ url }) => url === e.target.value);
   }
   createListDom(temp);
 });
 
 $('.clear-all').click(() => {
   listMap = [];
-  urlsMap = [];
+  urlMap = [];
   createListDom([]);
   createOpsDom([]);
   $('#json-renderer').html('');
-  chrome.runtime.sendMessage({type: 2}, (response) => {
+  chrome.runtime.sendMessage({ type: 2 }, (response) => {
     // 处理响应
   });
 });
 
+$('.cache-length').on('change', () => {
+  const length = $('.cache-length').val();
+  chrome.runtime.sendMessage({ type: 5, data: length });
+});

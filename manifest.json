@@ -21,9 +21,22 @@
       "description": "打开面板"
     }
   },
-  "permissions": ["tabs", "storage", "webNavigation", "webRequest", "cookies"],
+  "permissions": ["tabs", "storage", "webNavigation", "webRequest", "cookies", "notifications"],
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["style/content.css"],
+      "js": ["utils/jquery-3.6.0.min.js", "utils/content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/new.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

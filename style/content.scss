@@ -1,0 +1,105 @@
+.xl-jira {
+  position: fixed;
+  right: -400px;
+  bottom: 10px;
+  height: 150px;
+  width: 350px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0px 0px 5px #d9d9d9;
+  z-index: 999999999;
+  transition: all 0.2s;
+  padding: 20px;
+  box-sizing: border-box;
+  &:hover {
+    .close {
+      display: block;
+    }
+  }
+  &.active {
+    right: 10px;
+  }
+  .close {
+    display: none;
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0px 0px 5px #ddd;
+    cursor: pointer;
+    &::before,
+    &::after {
+      content: '';
+      display: inline-block;
+      height: 2px;
+      width: 12px;
+      position: absolute;
+      top: 8.5px;
+      left: 4px;
+      background: #9e9d9d;
+      border-radius: 2px;
+      transform: rotate(45deg);
+    }
+    &::after {
+      transform: rotate(-45deg);
+    }
+  }
+  .xl-msg {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .msg-title {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    img {
+      width: 40px;
+      margin-right: 5px;
+    }
+  }
+  .msg-content {
+    flex: 1;
+    margin: 5px 0;
+    overflow-y: auto;
+    a {
+      font-size: 14px !important;
+      color: #1eafb4;
+      width: 310px;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    width: 6px;
+    background: rgba(#101f1c, 0.08);
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(#101f1c, 0.2);
+    background-clip: padding-box;
+    min-height: 28px;
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(#101f1c, 0.5);
+  }
+}

@@ -9,7 +9,7 @@
   <script type="module" src="utils/popup.js"></script>
   <script src="utils/jquery-3.6.0.min.js"></script>
   <script src="viewJson/jquery.json-viewer.js"></script>
-  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="style/popup.css">
   <link rel="stylesheet" href="viewJson/jquery.json-viewer.css">
 </head>
 <style>
@@ -29,6 +29,11 @@
 <body>
   <div id="app">
     <div class="header">
+      <select name="" class="cache-length">
+        <option value="20" label="20" selected></option>
+        <option value="50" label="50"></option>
+        <option value="9999" label="全部"></option>
+      </select>
       <select name="" class="url-select"></select>
       <button class="clear-all">清除所有</button>
     </div>
