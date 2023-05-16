@@ -42,18 +42,20 @@ let jiraMap = {};
 
 const formatRequestBody = ({ url, method, requestBody }) => {
   if (method === 'POST' || method === 'PUT') {
-    const buffer = requestBody.raw[0].bytes;
-    const decoder = new TextDecoder();
-    const str = decoder.decode(new Uint8Array(buffer));
-    chrome.storage.local.get('length', (res) => {
-      const length = res.length || 20;
-      records.push({
-        method,
-        url,
-        data: JSON.parse(str),
+    const buffer = requestBody.raw && requestBody.raw[0].bytes;
+    if (buffer) {
+      const decoder = new TextDecoder();
+      const str = decoder.decode(new Uint8Array(buffer));
+      chrome.storage.local.get('length', (res) => {
+        const length = res.length || 20;
+        records.push({
+          method,
+          url,
+          data: JSON.parse(str),
+        });
+        records = records.slice(-length);
       });
-      records = records.slice(-length);
-    });
+    }
   }
 };
 
@@ -97,9 +99,8 @@ chrome.runtime.onMessage.addListener(({ type, data }, sender, sendResponse) => {
     case 99:
       // 打开新标签
       chrome.tabs.create({
-        url: '', // https://baidu.com
+        url: data, // https://baidu.com
       });
-      chrome.storage.local.set({ done: true });
       break;
 
     default:
@@ -156,8 +157,16 @@ if (jiraNotify) {
       )
         .then((response) => response.json())
         .then((data) => {
-          const str = data?.table;
-          formatJira(str);
+          if (data?.table) {
+            formatJira(data?.table);
+          } else {
+            // 未登陆 登陆过期
+            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+              if (tabs[0]) {
+                chrome.tabs.sendMessage(tabs[0].id, { type: 6 });
+              }
+            });
+          }
         })
         .catch((error) => {
           console.error(error);

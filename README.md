@@ -4,6 +4,7 @@ chrome.runtime.sendMessage类型
  - 3: 向content发送提醒数据
  - 4: 向background发送信息，表示提示已读
  - 5: 向background发送缓存数量
+ - 6: 登陆异常
 
 
  `sass --watch popup.scss popup.css`

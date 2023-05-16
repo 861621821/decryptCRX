@@ -35,7 +35,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["icons/new.png"],
+      "resources": ["icons/new.png", "icons/jira.png"],
       "matches": ["<all_urls>"]
     }
   ]

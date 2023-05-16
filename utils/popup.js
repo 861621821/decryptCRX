@@ -71,11 +71,18 @@ const initRecords = (records) => {
   createOpsDom(urlMap);
 };
 
+const copyToClipboard = (text) => {
+  const input = document.createElement('textarea');
+  input.value = text;
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand('copy');
+  document.body.removeChild(input);
+};
+
 chrome.runtime.onMessage.addListener(({ type, data }, sender, sendResponse) => {
-  console.log('type', type);
   switch (type) {
     case 1:
-      console.log(data);
       $('.cache-length').val(data.length || 20);
       initRecords(data.records);
       break;
@@ -90,7 +97,7 @@ $('.list').on('click', '.row', function () {
     $(e).removeClass('selected');
   });
   $(this).addClass('selected');
-  $('#json-renderer').jsonViewer(
+  $('#json-request').jsonViewer(
     {},
     {
       collapsed: $('#collapsed').is(':checked'),
@@ -99,7 +106,7 @@ $('.list').on('click', '.row', function () {
   );
   setTimeout(() => {
     const i = $(this).data('index');
-    $('#json-renderer').jsonViewer(listMap[i].data, {
+    $('#json-request').jsonViewer(listMap[i].data, {
       collapsed: $('#collapsed').is(':checked'),
       withQuotes: $('#with-quotes').is(':checked'),
     });
@@ -130,4 +137,9 @@ $('.clear-all').click(() => {
 $('.cache-length').on('change', () => {
   const length = $('.cache-length').val();
   chrome.runtime.sendMessage({ type: 5, data: length });
+});
+
+$('.copy-request').click(() => {
+  const str = $('#json-request').text();
+  copyToClipboard(str);
 });

@@ -144,6 +144,19 @@ select {
 }
 .main .right pre {
   font-family: system-ui, "PingFang SC", STHeiti, sans-serif !important;
+  line-height: 1.2;
+}
+.main .right .request,
+.main .right .response {
+  position: relative;
+}
+.main .right .copy-request,
+.main .right .copy-response {
+  font-size: 12px;
+  padding: 5px 8px;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 /*# sourceMappingURL=popup.css.map */

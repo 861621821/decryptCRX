@@ -1,9 +1,17 @@
-.xl-jira {
+.xl-model {
+  width: 100vw;
+  height: 100vh;
   position: fixed;
-  right: -400px;
-  bottom: 10px;
-  height: 150px;
-  width: 350px;
+  top: 0;
+  left: 0;
+  z-index: 999999999999;
+  background: rgba(255, 255, 255, 0.83);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.xl-jira {
   background: #fff;
   border-radius: 16px;
   box-shadow: 0px 0px 5px #d9d9d9;
@@ -11,12 +19,10 @@
   transition: all 0.2s;
   padding: 20px;
   box-sizing: border-box;
+  position: relative;
 }
 .xl-jira:hover .close {
   display: block;
-}
-.xl-jira.active {
-  right: 10px;
 }
 .xl-jira .close {
   display: none;
@@ -48,7 +54,16 @@
 .xl-jira .xl-msg {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  width: 400px;
+  max-height: 500px;
+}
+.xl-jira .xl-login {
+  width: 300px;
+  text-align: center;
+}
+.xl-jira .xl-login div:first-of-type {
+  font-size: 18px;
+  margin-bottom: 15px;
 }
 .xl-jira .msg-title {
   font-size: 18px;
@@ -59,15 +74,19 @@
   width: 40px;
   margin-right: 5px;
 }
+.xl-jira .msg-title span {
+  color: #1eafb4;
+}
 .xl-jira .msg-content {
   flex: 1;
   margin: 5px 0;
   overflow-y: auto;
 }
-.xl-jira .msg-content a {
-  font-size: 14px !important;
+.xl-jira .msg-content .jira-item {
+  font-size: 14px;
+  line-height: 1.5;
   color: #1eafb4;
-  width: 310px;
+  width: 350px;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;

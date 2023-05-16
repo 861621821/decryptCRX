@@ -136,6 +136,19 @@ select {
     overflow: auto;
     pre {
       font-family: system-ui, 'PingFang SC', STHeiti, sans-serif !important;
+      line-height: 1.2;
+    }
+    .request,
+    .response {
+      position: relative;
+    }
+    .copy-request,
+    .copy-response {
+      font-size: 12px;
+      padding: 5px 8px;
+      position: absolute;
+      right: 0;
+      top: 0;
     }
   }
 }

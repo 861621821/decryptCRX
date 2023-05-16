@@ -16,11 +16,12 @@
   * {
     margin: 0;
     padding: 0;
+    font-family: system-ui, 'PingFang SC', STHeiti, sans-serif;
   }
 
   #app {
     width: 800px;
-    height: 500px;
+    height: 580px;
     padding: 10px;
     box-sizing: border-box;
   }
@@ -32,7 +33,7 @@
       <select name="" class="cache-length">
         <option value="20" label="20" selected></option>
         <option value="50" label="50"></option>
-        <option value="9999" label="全部"></option>
+        <option value="100" label="100"></option>
       </select>
       <select name="" class="url-select"></select>
       <button class="clear-all">清除所有</button>
@@ -47,7 +48,15 @@
         <div class="list"></div>
       </div>
       <div class="right">
-        <pre id="json-renderer"></pre>
+        <div class="request">
+          <button class="copy-request">复制</button>
+          <pre id="json-request"></pre>
+        </div>
+
+        <!-- <div class="response">
+          <button class="copy-request">复制</button>
+          <pre id="json-response"></pre>
+        </div> -->
       </div>
     </div>
   </div>
