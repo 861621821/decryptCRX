@@ -47,7 +47,10 @@ const createListDom = (list) => {
   const temp = list.map((e) => {
     return `<div class="row" data-index="${e.i}"><div class="td">${e.i + 1}</div><div class="td">${e.method}</div><div class="td" title="${e.url}">${e.url}</div></div>`;
   });
-  $('.list').html(temp.join(''));
+  $('#list').html(temp.join(''));
+  var element = $('#list');
+  var height = element[0].scrollHeight;
+  element.scrollTop(height);
 };
 
 const createOpsDom = (list) => {
@@ -92,7 +95,7 @@ chrome.runtime.onMessage.addListener(({ type, data }, sender, sendResponse) => {
   }
 });
 
-$('.list').on('click', '.row', function () {
+$('#list').on('click', '.row', function () {
   Array.from($('.row')).map((e) => {
     $(e).removeClass('selected');
   });

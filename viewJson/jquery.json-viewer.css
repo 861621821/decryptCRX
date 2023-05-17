@@ -9,8 +9,7 @@ ul.json-dict, ol.json-array {
   color: #0B7500;
 }
 .json-literal {
-  color: #1A01CC;
-  font-weight: bold;
+  color: #f49d24;
 }
 
 /* Toggle button */
