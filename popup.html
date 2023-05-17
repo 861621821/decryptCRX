@@ -11,6 +11,7 @@
   <script src="viewJson/jquery.json-viewer.js"></script>
   <link rel="stylesheet" href="style/popup.css">
   <link rel="stylesheet" href="viewJson/jquery.json-viewer.css">
+  <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3672028_8474sis2em5.css">
 </head>
 <style>
   * {
@@ -39,7 +40,7 @@
       <button class="clear-all">清除所有</button>
     </div>
     <div class="main">
-      <div class="left">
+      <div class="top">
         <div class="thead">
           <div class="th">#</div>
           <div class="th">Method</div>
@@ -47,16 +48,13 @@
         </div>
         <div class="list"></div>
       </div>
-      <div class="right">
-        <div class="request">
-          <button class="copy-request">复制</button>
-          <pre id="json-request"></pre>
+      <div class="bottom">
+        <div class="info">
+          <i class="iconfont icon-fuzhi copy"></i>
+          <div class="json-box">
+            <pre id="json-inner"></pre>
+          </div>
         </div>
-
-        <!-- <div class="response">
-          <button class="copy-request">复制</button>
-          <pre id="json-response"></pre>
-        </div> -->
       </div>
     </div>
   </div>

@@ -82,81 +82,94 @@ select {
 .main {
   flex: 1;
   display: flex;
+  flex-direction: column;
   padding: 10px 0;
   overflow: hidden;
 }
-.main .left {
-  width: 450px;
-  border-right: 1px solid #ebeef5;
+.main .top {
+  flex: 1;
+  border-bottom: 1px solid #ebeef5;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  padding: 5px 0;
 }
-.main .left .thead {
+.main .top .thead {
   padding: 5px 0;
   background: #f2f2f2;
 }
-.main .left .list {
+.main .top .list {
   flex: 1;
   overflow: auto;
 }
-.main .left .thead,
-.main .left .row {
+.main .top .thead,
+.main .top .row {
   display: flex;
   padding: 5px 0;
   cursor: pointer;
 }
-.main .left .thead:nth-child(even),
-.main .left .row:nth-child(even) {
+.main .top .thead:nth-child(even),
+.main .top .row:nth-child(even) {
   background: #f6f6f6;
 }
-.main .left .thead.selected,
-.main .left .row.selected {
+.main .top .thead.selected,
+.main .top .row.selected {
   background: #cbf6c9;
 }
-.main .left .thead div,
-.main .left .row div {
+.main .top .thead div,
+.main .top .row div {
   padding: 0 5px;
 }
-.main .left .thead div:nth-of-type(1),
-.main .left .row div:nth-of-type(1) {
+.main .top .thead div:nth-of-type(1),
+.main .top .row div:nth-of-type(1) {
   width: 25px;
 }
-.main .left .thead div:nth-of-type(2),
-.main .left .row div:nth-of-type(2) {
+.main .top .thead div:nth-of-type(2),
+.main .top .row div:nth-of-type(2) {
   width: 60px;
 }
-.main .left .thead div:nth-of-type(1), .main .left .thead div:nth-of-type(2),
-.main .left .row div:nth-of-type(1),
-.main .left .row div:nth-of-type(2) {
+.main .top .thead div:nth-of-type(1), .main .top .thead div:nth-of-type(2),
+.main .top .row div:nth-of-type(1),
+.main .top .row div:nth-of-type(2) {
   text-align: center;
 }
-.main .left .thead div:nth-of-type(3),
-.main .left .row div:nth-of-type(3) {
+.main .top .thead div:nth-of-type(3),
+.main .top .row div:nth-of-type(3) {
   flex: 1;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.main .right {
+.main .bottom {
   flex: 1;
-  padding: 5px 5px 5px 20px;
-  overflow: auto;
+  display: flex;
+  overflow: hidden;
+  padding: 5px 0 5px 10px;
 }
-.main .right pre {
+.main .bottom pre {
   font-family: system-ui, "PingFang SC", STHeiti, sans-serif !important;
   line-height: 1.2;
 }
-.main .right .request,
-.main .right .response {
+.main .bottom .info {
   position: relative;
+  flex: 1;
+  overflow: hidden;
 }
-.main .right .copy-request,
-.main .right .copy-response {
-  font-size: 12px;
-  padding: 5px 8px;
+.main .bottom .info .json-box {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+.main .bottom .icon-fuzhi {
+  font-size: 16px;
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 10px;
+  top: 5px;
+  cursor: pointer;
+  color: #999;
+}
+.main .bottom .icon-fuzhi:hover {
+  color: #333;
 }
 
 /*# sourceMappingURL=popup.css.map */

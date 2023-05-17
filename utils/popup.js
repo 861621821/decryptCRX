@@ -97,7 +97,7 @@ $('.list').on('click', '.row', function () {
     $(e).removeClass('selected');
   });
   $(this).addClass('selected');
-  $('#json-request').jsonViewer(
+  $('#json-inner').jsonViewer(
     {},
     {
       collapsed: $('#collapsed').is(':checked'),
@@ -106,7 +106,7 @@ $('.list').on('click', '.row', function () {
   );
   setTimeout(() => {
     const i = $(this).data('index');
-    $('#json-request').jsonViewer(listMap[i].data, {
+    $('#json-inner').jsonViewer(listMap[i].data, {
       collapsed: $('#collapsed').is(':checked'),
       withQuotes: $('#with-quotes').is(':checked'),
     });
@@ -139,7 +139,7 @@ $('.cache-length').on('change', () => {
   chrome.runtime.sendMessage({ type: 5, data: length });
 });
 
-$('.copy-request').click(() => {
-  const str = $('#json-request').text();
+$('.copy').click(() => {
+  const str = $('#json-inner').text();
   copyToClipboard(str);
 });
