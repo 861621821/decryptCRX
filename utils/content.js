@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener(({ type, data }, sender, sendResponse) => {
     const inner = `
       <i class="close"></i>
       <div class="xl-msg">
-        <div class="msg-title"><img src="${newUrl}">你有<span> ${data.length} </span>条新的jira任务</div>
+        <div class="msg-title"><img src="${newUrl}">你有<span> ${data.length} </span>条新的Jira任务</div>
         <div class="msg-content">${as.join('')}</div>
       </div>
     `;
@@ -16,7 +16,7 @@ chrome.runtime.onMessage.addListener(({ type, data }, sender, sendResponse) => {
   } else if (type === 6) {
     const inner = `
       <div class="xl-login">
-        <div>jira未登陆或登陆已过期</div>
+        <div>Jira未登陆或登陆已过期</div>
         <div class="login-btn"><a href="https://jira.internal.pingxx.com/login.jsp" target="_blank">重新登陆</a></div>
       </div>
       `;

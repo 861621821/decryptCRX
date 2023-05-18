@@ -1,24 +1,15 @@
 let listMap = [];
 let urlMap = [];
-// 获取cookie
-let cookie = '';
-chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-  chrome.cookies.getAll({ url: tabs[0].url }, (cookies) => {
-    const authorization = cookies.find((e) => e.name === '_authorization');
-    if (authorization && authorization.value) {
-      cookie = authorization.value;
-    }
-  });
-});
+
 // 建立与 background.js 的通信连接
 const port = chrome.runtime.connect({
   name: 'popup',
 });
 
 // 加密
-const encryptParams = (params) => {
+const encryptParams = (params, cookie) => {
   const data = CryptoJS.enc.Utf8.parse(params);
-  const key = CryptoJS.enc.Utf8.parse(cookie.slice(cookie.length - 16));
+  const key = CryptoJS.enc.Utf8.parse(cookie);
   const encrypted = CryptoJS.AES.encrypt(data, key, {
     mode: CryptoJS.mode.ECB,
     padding: CryptoJS.pad.Pkcs7,
@@ -27,18 +18,20 @@ const encryptParams = (params) => {
 };
 
 // 解密
-const decryptParams = (encryptedParams) => {
+const decryptParams = (data, cookie) => {
+  if (!data.enc_data) {
+    return data;
+  }
   try {
-    const key = CryptoJS.enc.Utf8.parse(cookie.slice(cookie.length - 16));
-    const decipher = CryptoJS.AES.decrypt(encryptedParams, key, {
+    const key = CryptoJS.enc.Utf8.parse(cookie);
+    const decipher = CryptoJS.AES.decrypt(data.enc_data, key, {
       mode: CryptoJS.mode.ECB,
       padding: CryptoJS.pad.Pkcs7,
     });
     const plaintext = decipher.toString(CryptoJS.enc.Utf8);
     return JSON.parse(plaintext);
   } catch (error) {
-    console.log(error);
-    return { error: '解码异常' };
+    return { msg: '解码异常', error };
   }
 };
 
@@ -66,7 +59,7 @@ const initRecords = (records) => {
     return {
       ...e,
       i,
-      data: e.data.enc_data ? decryptParams(e.data.enc_data) : e.data,
+      data: decryptParams(e.data, e.cookie),
     };
   });
   listMap = list;
@@ -124,6 +117,7 @@ $('.url-select').on('change', (e) => {
     temp = listMap.filter(({ url }) => url === e.target.value);
   }
   createListDom(temp);
+  $('#json-inner').html('');
 });
 
 $('.clear-all').click(() => {
@@ -132,9 +126,8 @@ $('.clear-all').click(() => {
   createListDom([]);
   createOpsDom([]);
   $('#json-renderer').html('');
-  chrome.runtime.sendMessage({ type: 2 }, (response) => {
-    // 处理响应
-  });
+  $('#json-inner').html('');
+  chrome.runtime.sendMessage({ type: 2 });
 });
 
 $('.cache-length').on('change', () => {

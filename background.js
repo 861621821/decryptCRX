@@ -1,57 +1,47 @@
-let cookie = '';
 let error = ''; // 错误信息
 let records = []; // 记录接口信息
 let jiraMap = {};
 
-// 获取cookie
-// (function() {
-//   const urls = [
-//     'http://unionpay.cn',
-//     // '*://unionpay.pingpptest.com/*'
-//   ];
-//   const promises = [];
-
-//   for (let i = 0; i < urls.length; i++) {
-//     promises.push(
-//       new Promise((resolve) => {
-//         chrome.cookies.getAll({url: urls[i]}, function(result) {
-//           resolve(result);
-//         });
-//       })
-//     );
-//   }
-
-//   Promise.all(promises).then((results) => {
-//     const cookies = results.flat();
-//     const authorization = cookies.find(e => e.name === '_authorization');
-//     authorization && (cookie = authorization.value);
-//     if (authorization && authorization.value) {
-//       cookie = authorization.value;
-//     } else {
-//       error = '获取cookie异常';
-//     }
-//   });
-// })();
-
-// const sendMessageToPopup = (data) => {
-//   console.log('back:',data);
-//   chrome.runtime.sendMessage({data}, (response) => {
-//     console.log(response);
-//   });
-// };
+// 获取当前标签下的cookie
+const getCookie = () => {
+  return new Promise((resolve, reject) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs && tabs[0] && tabs[0].url) {
+        chrome.cookies.getAll({ url: tabs[0].url }, (cookies) => {
+          const authorization = cookies.find((e) => e.name === '_authorization');
+          let cookie = authorization && authorization.value;
+          if (cookie) {
+            let res = cookie.slice(cookie.length - 16);
+            resolve(res);
+          } else {
+            resolve(null);
+          }
+        });
+      }
+    });
+  });
+};
 
 const formatRequestBody = ({ url, method, requestBody }) => {
   if (method === 'POST' || method === 'PUT') {
-    const buffer = requestBody.raw && requestBody.raw[0].bytes;
+    const buffer = requestBody && requestBody.raw && requestBody.raw[0].bytes;
     if (buffer) {
       const decoder = new TextDecoder();
       const str = decoder.decode(new Uint8Array(buffer));
-      chrome.storage.local.get('length', (res) => {
+      chrome.storage.local.get('length', async (res) => {
         const length = res.length || 20;
+        let data = '';
+        try {
+          data = JSON.parse(str);
+        } catch (error) {
+          data = str;
+        }
+        const cookie = await getCookie();
         records.push({
           method,
           url,
-          data: JSON.parse(str),
+          data,
+          cookie,
         });
         records = records.slice(-length);
       });
@@ -173,6 +163,6 @@ if (jiraNotify) {
         });
     };
     queryJira(true);
-    setInterval(queryJira, 10000);
+    setInterval(queryJira, 15000);
   })();
 }
