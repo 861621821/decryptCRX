@@ -100,11 +100,13 @@ class Background {
       }
     } else {
       const query = url.split('?')[1];
-      const params = query.split('&');
-      params.forEach((e) => {
-        const temp = e.split('=');
-        data[temp[0]] = temp[1];
-      });
+      if (query) {
+        const params = query.split('&');
+        params.forEach((e) => {
+          const temp = e.split('=');
+          data[temp[0]] = temp[1];
+        });
+      }
     }
     chrome.storage.local.get('length', async (res) => {
       const length = res.length || 20;
@@ -174,9 +176,7 @@ class Background {
           });
         }
       })
-      .catch((error) => {
-        console.error(error);
-      });
+      .catch(() => {});
   }
 }
 
