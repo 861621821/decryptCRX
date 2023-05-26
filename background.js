@@ -1,15 +1,13 @@
 class Background {
   constructor() {
-    this.isFocus = false; // 是否在前台
+    this.isFocus = true; // 是否在前台
+    this.time = null;
+    this.timer = null;
     this.records = []; // 记录接口信息
     this.jiraNotify = false; // jira提醒开关
     this.jiraList = {}; // jira列表
     this.jiraMap = {};
 
-    // 监听浏览器切换前后台
-    chrome.windows.onFocusChanged.addListener((windowId) => {
-      this.isFocus = windowId !== -1;
-    });
     // 监听浏览器请求
     chrome.webRequest.onBeforeRequest.addListener(this.formatRequestBody, { urls: ['<all_urls>'], types: ['xmlhttprequest'] }, ['requestBody']);
 
@@ -59,8 +57,30 @@ class Background {
       sendResponse({ status: 2 });
     });
 
-    // 开启定时器查询jira
-    setInterval(this.queryJira.bind(this), 15000);
+    // 监听浏览器切换前后台
+    chrome.windows.onFocusChanged.addListener((windowId) => {
+      this.isFocus = windowId !== -1;
+      if (this.isFocus) {
+        const now = Date.now();
+        if (now - this.time > 15000) {
+          setTimeout(() => {
+            this.queryJira();
+          }, 500);
+        }
+        this.timer = setInterval(() => {
+          this.queryJira();
+        }, 15000);
+      } else {
+        clearInterval(this.timer);
+      }
+    });
+
+    setTimeout(() => {
+      this.queryJira();
+      this.timer = setInterval(() => {
+        this.queryJira();
+      }, 15000);
+    }, 500);
   }
 
   // 获取cookie
@@ -129,7 +149,7 @@ class Background {
     // 通知content
     keys.length &&
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (tabs[0]) {
+        if (tabs[0] && !tabs[0].url.startsWith('chrome://')) {
           chrome.tabs.sendMessage(tabs[0].id, { type: 3, data });
         }
       });
@@ -160,6 +180,7 @@ class Background {
 
   // 获取jira分配给我的信息
   queryJira() {
+    this.time = Date.now();
     fetch(
       `https://jira.internal.pingxx.com/rest/gadget/1.0/issueTable/jql?num=10&tableContext=jira.table.cols.dashboard&addDefault=false&columnNames=issuetype&columnNames=issuekey&columnNames=summary&columnNames=assignee&columnNames=reporter&columnNames=status&columnNames=priority&enableSorting=true&paging=true&showActions=true&jql=assignee+%3D+currentUser()+AND+resolution+%3D+unresolved+ORDER+BY+priority+DESC%2C+created+ASC&sortBy=&startIndex=0&_=${Date.now()}`
     )
