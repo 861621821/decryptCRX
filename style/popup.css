@@ -55,8 +55,98 @@ select {
 }
 
 #app {
+  width: 800px;
+  height: 580px;
+  padding: 10px 0;
+  display: flex;
+}
+
+.func {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  padding: 0 5px;
+  border-right: 1px solid #dcdfe6;
+}
+.func .logo {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+}
+.func .iconfont {
+  font-size: 22px;
+  margin: 5px 0;
+  padding: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.func .iconfont.active {
+  color: #1eafb4;
+}
+
+.func-container {
+  flex: 1;
+  padding: 0 10px;
+  overflow: hidden;
+}
+.func-container > div {
+  height: 100%;
+  width: 100%;
+  display: none;
+}
+.func-container .jiemi {
+  display: flex;
+  flex-direction: column;
+}
+.func-container .json {
+  display: flex;
+  border: 1px solid #dcdfe6;
+  position: relative;
+}
+.func-container .json > div {
+  flex: 1;
+  overflow: auto;
+}
+.func-container .json > div:first-of-type {
+  border-right: 1px solid #dcdfe6;
+}
+.func-container .json textarea {
+  width: 100%;
+  height: calc(100% - 3px);
+  border: unset;
+  resize: none;
+  outline: none;
+  padding: 5px;
+}
+.func-container .json .json-json-box {
+  padding: 5px 12px;
+}
+.func-container .json .icon-fuzhi {
+  font-size: 16px;
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  cursor: pointer;
+  color: #999;
+}
+.func-container .json .icon-fuzhi:hover {
+  color: #333;
+}
+.func-container .shijian label {
+  margin-right: 10px;
+}
+.func-container .shijian input {
+  border: 1px solid #dcdfe6;
+  outline: none;
+  border-radius: 2px;
+  height: 30px;
+  margin-bottom: 2px;
+  padding: 0 5px;
+  width: 180px;
+}
+.func-container .shijian input ~ span {
+  font-size: 14px;
+  margin-left: 20px;
 }
 
 .header {
@@ -92,7 +182,7 @@ select {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: 5px 0;
+  padding-bottom: 5px;
 }
 .main .top .thead {
   padding: 5px 0;

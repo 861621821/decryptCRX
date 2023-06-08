@@ -11,50 +11,71 @@
   <script src="viewJson/jquery.json-viewer.js"></script>
   <link rel="stylesheet" href="style/popup.css">
   <link rel="stylesheet" href="viewJson/jquery.json-viewer.css">
-  <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3672028_8474sis2em5.css">
+  <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3672028_y18viydu6bk.css">
 </head>
 <style>
   * {
     margin: 0;
     padding: 0;
     font-family: system-ui, 'PingFang SC', STHeiti, sans-serif;
-  }
-
-  #app {
-    width: 800px;
-    height: 580px;
-    padding: 10px;
     box-sizing: border-box;
   }
 </style>
 
 <body>
   <div id="app">
-    <div class="header">
-      <select name="" class="cache-length">
-        <option value="20" label="20" selected></option>
-        <option value="50" label="50"></option>
-        <option value="100" label="100"></option>
-      </select>
-      <select name="" class="url-select"></select>
-      <button class="clear-all">清除所有</button>
+    <div class="func">
+      <img src="icons/logo.png" class="logo" alt="" srcset="">
+      <i class="iconfont icon-jiemi active" data-class-name="jiemi"></i>
+      <i class="iconfont icon-json" data-class-name="json"></i>
+      <i class="iconfont icon-shijian" data-class-name="shijian"></i>
     </div>
-    <div class="main">
-      <div class="top">
-        <div class="thead">
-          <div class="th">#</div>
-          <div class="th">Method</div>
-          <div class="th">Url</div>
+    <div class="func-container">
+      <div class="jiemi">
+        <div class="header">
+          <select name="" class="cache-length">
+            <option value="20" label="20" selected></option>
+            <option value="50" label="50"></option>
+            <option value="100" label="100"></option>
+          </select>
+          <select name="" class="url-select"></select>
+          <button class="clear-all">清除所有</button>
         </div>
-        <div id="list"></div>
-      </div>
-      <div class="bottom">
-        <div class="info">
-          <i class="iconfont icon-fuzhi copy"></i>
-          <div class="json-box">
-            <pre id="json-inner"></pre>
+        <div class="main">
+          <div class="top">
+            <div class="thead">
+              <div class="th">#</div>
+              <div class="th">Method</div>
+              <div class="th">Url</div>
+            </div>
+            <div id="list"></div>
+          </div>
+          <div class="bottom">
+            <div class="info">
+              <i class="iconfont icon-fuzhi copy"></i>
+              <div class="json-box">
+                <pre id="json-inner"></pre>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+
+      <div class="json">
+        <div class="json-json-str">
+          <textarea></textarea>
+        </div>
+        <i class="iconfont icon-fuzhi copy"></i>
+        <div class="json-json-box">
+          <pre id="json-json-inner"></pre>
+        </div>
+      </div>
+
+      <div class="shijian">
+        <label>时间戳转北京时间：</label>
+        <input type="text" class="unix-input"><span class="date"></span><br>
+        <label>北京时间转时间戳：</label>
+        <input type="text" class="date-input" placeholder="yyyy-MM-dd HH:mm:ss"><span class="unix"></span>
       </div>
     </div>
   </div>

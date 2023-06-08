@@ -16,7 +16,7 @@
     "_execute_action": {
       "suggested_key": {
         "default": "Ctrl+Shift+L",
-        "mac": "MacCtrl+Shift+L"
+        "mac": "Ctrl+Shift+L"
       },
       "description": "打开面板"
     }

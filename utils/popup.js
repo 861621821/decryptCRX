@@ -42,7 +42,7 @@ const createListDom = (list) => {
   });
   $('#list').html(temp.join(''));
   var element = $('#list');
-  var height = element[0].scrollHeight;
+  var height = element[0] && element[0].scrollHeight;
   element.scrollTop(height);
 };
 
@@ -106,6 +106,26 @@ $('#list').on('click', '.row', function () {
       collapsed: $('#collapsed').is(':checked'),
       withQuotes: $('#with-quotes').is(':checked'),
     });
+    const reg1 = /^[1-9][0-9]{9}$/gm;
+    const reg2 = /^[1-9][0-9]{12}$/gm;
+    $('#json-inner')
+      .find('.json-string')
+      .each((i, e) => {
+        const unix = $(e).text().replace(/['"]/g, '');
+        if (reg1.test(unix) || reg2.test(unix)) {
+          const date = new Date(Number(unix));
+          $(e).attr('title', date.toLocaleString());
+        }
+      });
+    $('#json-inner')
+      .find('.json-literal')
+      .each((i, e) => {
+        const unix = $(e).text().replace(/['"]/g, '');
+        if (reg1.test(unix) || reg2.test(unix)) {
+          const date = new Date(Number(unix));
+          $(e).attr('title', date.toLocaleString());
+        }
+      });
   }, 50);
 });
 
@@ -135,7 +155,65 @@ $('.cache-length').on('change', () => {
   chrome.runtime.sendMessage({ type: 5, data: length });
 });
 
-$('.copy').click(() => {
+$('.jiemi .copy').click(() => {
   const str = $('#json-inner').text();
   copyToClipboard(str);
+});
+
+$('body').on('click', '.func i', (e) => {
+  $('.func .iconfont').removeClass('active');
+  $(e.target).addClass('active');
+  const className = $(e.target).data('class-name');
+  $(`.func-container .${className}`).show().siblings().hide();
+  if (className === 'shijian') {
+    $('.unix-input').attr('placeholder', Date.now());
+  }
+});
+
+$('body').on('input', 'textarea', (e) => {
+  try {
+    const json = JSON.parse(e.target.value);
+    setTimeout(() => {
+      $('#json-json-inner').jsonViewer(json, {
+        collapsed: $('#collapsed').is(':checked'),
+        withQuotes: $('#with-quotes').is(':checked'),
+      });
+      const reg1 = /^[1-9][0-9]{9}$/gm;
+      const reg2 = /^[1-9][0-9]{12}$/gm;
+      $('#json-json-inner')
+        .find('.json-string')
+        .each((i, e) => {
+          const unix = $(e).text().replace(/['"]/g, '');
+          if (reg1.test(unix) || reg2.test(unix)) {
+            const date = new Date(Number(unix));
+            $(e).attr('title', date.toLocaleString());
+          }
+        });
+      $('#json-json-inner')
+        .find('.json-literal')
+        .each((i, e) => {
+          const unix = $(e).text().replace(/['"]/g, '');
+          if (reg1.test(unix) || reg2.test(unix)) {
+            const date = new Date(Number(unix));
+            $(e).attr('title', date.toLocaleString());
+          }
+        });
+    }, 50);
+  } catch (e) {}
+});
+
+$('.json .copy').click(() => {
+  const str = $('#json-json-inner').text();
+  copyToClipboard(str);
+});
+
+$('.unix-input').on('input', (e) => {
+  const unix = e.target.value;
+  const date = new Date(Number(unix));
+  $('.date').text(date.toLocaleString());
+});
+
+$('.date-input').on('input', (e) => {
+  const date = new Date(e.target.value);
+  $('.unix').text(date.getTime());
 });
