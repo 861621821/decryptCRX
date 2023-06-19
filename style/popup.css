@@ -165,14 +165,13 @@ input {
   color: #1eafb4;
   background: #e6fffb;
   border-color: #b5f5ec;
-  margin-left: 20px;
+  margin: 0 10px;
 }
 
 .clear-btn {
   color: #f56c6c;
   background: #fef0f0;
   border-color: #fbc4c4;
-  margin-left: 20px;
 }
 
 .main {
