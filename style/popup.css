@@ -132,6 +132,9 @@ input {
 .func-container .json .icon-fuzhi:hover {
   color: #333;
 }
+.func-container .shijian {
+  padding: 10px 0;
+}
 .func-container .shijian label {
   margin-right: 10px;
 }
@@ -160,8 +163,8 @@ input {
 
 .filter-btn {
   color: #1eafb4;
-  background: #f0feff;
-  border-color: #51b9ae;
+  background: #e6fffb;
+  border-color: #b5f5ec;
   margin-left: 20px;
 }
 
