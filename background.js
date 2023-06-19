@@ -14,10 +14,6 @@ class Background {
             this.keyWords = res.keyWords || '';
         });
 
-        chrome.storage.local.get('length', (res) => {
-            this.length = res.length || 20;
-        });
-
         // 监听浏览器请求
         chrome.webRequest.onBeforeRequest.addListener(this.formatRequestBody, { urls: ['<all_urls>'], types: ['xmlhttprequest'] }, ['requestBody']);
 
