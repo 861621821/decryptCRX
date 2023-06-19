@@ -47,10 +47,10 @@ button {
   border-radius: 4px;
 }
 
-select {
+select,
+input {
   border: 1px solid #dcdfe6;
   border-radius: 4px;
-  width: 80px;
   padding: 0 8px;
 }
 
@@ -154,15 +154,18 @@ select {
   padding-bottom: 10px;
   border-bottom: 1px solid #ebeef5;
 }
-.header .url-select {
+.header .key-words {
   flex: 1;
 }
 
-.cache-length {
-  margin-right: 10px;
+.filter-btn {
+  color: #1eafb4;
+  background: #f0feff;
+  border-color: #51b9ae;
+  margin-left: 20px;
 }
 
-.clear-all {
+.clear-btn {
   color: #f56c6c;
   background: #fef0f0;
   border-color: #fbc4c4;

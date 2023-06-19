@@ -1,12 +1,22 @@
 class Background {
+    isFocus = true; // 是否在前台
+    time = null;
+    timer = null;
+    records = []; // 记录接口信息
+    jiraNotify = false; // jira提醒开关
+    jiraList = {}; // jira列表
+    jiraMap = {};
+    keyWords = '';
+    length = 50; // 记录条数
+
     constructor() {
-        this.isFocus = true; // 是否在前台
-        this.time = null;
-        this.timer = null;
-        this.records = []; // 记录接口信息
-        this.jiraNotify = false; // jira提醒开关
-        this.jiraList = {}; // jira列表
-        this.jiraMap = {};
+        chrome.storage.local.get('keyWords', (res) => {
+            this.keyWords = res.keyWords || '';
+        });
+
+        chrome.storage.local.get('length', (res) => {
+            this.length = res.length || 20;
+        });
 
         // 监听浏览器请求
         chrome.webRequest.onBeforeRequest.addListener(this.formatRequestBody, { urls: ['<all_urls>'], types: ['xmlhttprequest'] }, ['requestBody']);
@@ -14,9 +24,9 @@ class Background {
         // 监听浏览器弹出窗口打开事件
         chrome.runtime.onConnect.addListener((port) => {
             if (port.name === 'popup') {
-                chrome.storage.local.get('length', (res) => {
-                    const length = res.length || 20;
-                    chrome.runtime.sendMessage({ type: 1, data: { records: this.records, length } });
+                chrome.storage.local.get('keyWords', (res) => {
+                    const keyWords = res.keyWords || '';
+                    chrome.runtime.sendMessage({ type: 1, data: { records: this.filterRecords(keyWords), keyWords } });
                 });
             }
         });
@@ -34,14 +44,11 @@ class Background {
                     chrome.storage.local.set({ jiraMap: this.jiraMap });
                     break;
 
-                case 5:
-                    // 修改缓存数量
-                    this.records = records.slice(-data);
-                    chrome.storage.local.set({ length: data });
-                    chrome.storage.local.get('length', (res) => {
-                        const length = res.length || 20;
-                        chrome.runtime.sendMessage({ type: 1, data: { records: this.records, length } });
-                    });
+                case 7:
+                    // 修改管关键词
+                    this.keyWords = data;
+                    chrome.storage.local.set({ keyWords: data });
+                    chrome.runtime.sendMessage({ type: 1, data: { records: this.filterRecords(this.keyWords), keyWords: this.keyWords } });
                     break;
 
                 case 99:
@@ -128,16 +135,15 @@ class Background {
                 });
             }
         }
-        chrome.storage.local.get('length', async (res) => {
-            const length = res.length || 20;
+        if (url.includes(this.keyWords)) {
             this.records.push({
                 method,
                 url,
                 data,
                 cookie,
             });
-            this.records = this.records.slice(-length);
-        });
+            this.records = this.records.slice(-this.length);
+        }
     };
 
     // 发起通知
@@ -180,7 +186,12 @@ class Background {
 
     // 获取jira分配给我的信息
     queryJira() {
-        this.time = Date.now();
+        let now = Date.now();
+        if (this.time && now - this.time < 15000) {
+            return;
+        }
+        this.time = now;
+        // 设置超时时间
         let controller = new AbortController();
         let timeout = setTimeout(() => {
             controller.abort();
@@ -211,6 +222,17 @@ class Background {
                 controller = null;
                 timeout = null;
             });
+    }
+
+    filterRecords(keyWords) {
+        const res = [];
+        this.records.forEach((e) => {
+            if (e.url.includes(keyWords)) {
+                res.push(e);
+            }
+        });
+        this.records = res.slice(-50);
+        return this.records;
     }
 }
 
