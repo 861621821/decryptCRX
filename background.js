@@ -1,7 +1,8 @@
 class Background {
     isFocus = true; // 是否在前台
-    time = null;
+    requestTime = null; // 请求时间
     timer = null;
+    stopTime = null; // 记录停止时间 1h后再次提示
     records = []; // 记录接口信息
     jiraNotify = false; // jira提醒开关
     jiraList = {}; // jira列表
@@ -40,6 +41,10 @@ class Background {
                     chrome.storage.local.set({ jiraMap: this.jiraMap });
                     break;
 
+                case 5:
+                    this.stopTime = Date.now();
+                    break;
+
                 case 7:
                     // 修改管关键词
                     this.keyWords = data;
@@ -65,7 +70,7 @@ class Background {
             this.isFocus = windowId !== -1;
             if (this.isFocus) {
                 const now = Date.now();
-                if (now - this.time > 15000) {
+                if (now - this.requestTime > 15000) {
                     setTimeout(() => {
                         this.queryJira();
                     }, 500);
@@ -183,10 +188,10 @@ class Background {
     // 获取jira分配给我的信息
     queryJira() {
         let now = Date.now();
-        if (this.time && now - this.time < 15000) {
+        if (this.requestTime && now - this.requestTime < 15000) {
             return;
         }
-        this.time = now;
+        this.requestTime = now;
         // 设置超时时间
         let controller = new AbortController();
         let timeout = setTimeout(() => {
@@ -204,8 +209,12 @@ class Background {
             .then((data) => {
                 if (data && data.table) {
                     this.formatJira(data?.table);
+                    this.stopTime = null;
                 } else {
                     // 未登陆 登陆过期
+                    if (this.stopTime && Date.now() - this.stopTime < 1000 * 60 * 60) {
+                        return;
+                    }
                     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
                         if (tabs[0] && !tabs[0].url.startsWith('chrome://')) {
                             chrome.tabs.sendMessage(tabs[0].id, { type: 6 });
@@ -215,8 +224,15 @@ class Background {
             })
             .catch(() => {
                 clearTimeout(timeout);
-                controller = null;
                 timeout = null;
+                if (this.stopTime && Date.now() - this.stopTime < 1000 * 60 * 60) {
+                    return;
+                }
+                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                    if (tabs[0] && !tabs[0].url.startsWith('chrome://')) {
+                        chrome.tabs.sendMessage(tabs[0].id, { type: 6 });
+                    }
+                });
             });
     }
 

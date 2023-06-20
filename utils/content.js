@@ -36,6 +36,8 @@ $('body').on('click', '.xl-model .close', (e) => {
     $('.xl-model').remove();
     if (e.target.nextElementSibling.className == 'xl-msg') {
         chrome.runtime.sendMessage({ type: 4 });
+    } else if (e.target.nextElementSibling.className == 'xl-login') {
+        chrome.runtime.sendMessage({ type: 5 });
     }
 });
 
